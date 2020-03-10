@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Welcome</title>
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<script src="/js/jquery.min.js"></script>
+        <style>
+        body,html{
+			height: 100%;
+			margin: 0;
+		}
+
+		.card{
+			height: 100%;
+			width:100%
+		}
+		.chat{
+			margin-top: -50%;
+			margin-bottom: -50%;
+  			display: flex;
+  			align-items: center;
+  			justify-content: center;
+			height: 100%;
+			width:100%;
+
+		}
+		.msg_card_body{
+			overflow-y: auto;
+		}
+        .response{
+            margin: auto;
+			font-size: 2rem;
+            padding: 10px;
+            position: relative;
+        }
+		.card-footer{
+			position:fixed;
+			bottom:0;
+			width:100%;
+			border-radius: 0 0 15px 15px !important;
+			border-top: 0 !important;
+		}
+		.message{
+			background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color:white !important;
+			height: 2rem !important;
+			overflow-y: auto;
+			border-radius: .25rem 0 0 .25rem!important;
+		}
+		.message:focus{
+		    box-shadow:none !important;
+           	outline:0px !important;
+		}
+		.send{
+			background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+			padding: .5rem;
+			padding-top: .2rem;
+			padding-bottom: 0;
+			border-radius: 0 .25rem .25rem 0 !important;
+		}
+        @media only screen and (max-device-width: 480px) {
+            .message{
+                font-size: 4rem !important;
+			    height: 4.25rem !important;
+			    border-radius: .5rem 0 0 .5rem!important;
+            }
+            .response{
+                font-size: 4rem !important;
+            }
+
+            .send{
+                background-color: rgba(0,0,0,0.3) !important;
+                font-size: 4rem !important;
+                border:0 !important;
+                color: white !important;
+                cursor: pointer;
+                padding: 1rem;
+                padding-top: .4rem;
+                padding-bottom: 0;
+                border-radius: 0 .5rem .5rem 0 !important;
+            }
+        }
+        </style>
+    </head>
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="card">
+					<div id="chat" class="card-body msg_card_body"></div>
+				</div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input id="message" name="message" class="form-control message" placeholder="Type here."/>
+                        <div class="input-group-append">
+                            <span class="send">&gt;</span>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+        <script>
+            $(document).ready(function(){
+                !function() {
+                    var csrf_token = '{{ csrf_token() }}';
+                    function send_message(){
+                        if ($("#message").val() != '') {
+                            $("#chat").animate({ opacity: 0.0}, 300, function() {
+                                $.post('/chat', {
+                                    csrf_token:csrf_token,
+                                    message:$("#message").val()
+                                })
+                                .done(function( data ) {
+
+                                    csrf_token = data.csrf_token;
+                                    $('#message').clone().attr('type', data.input_type).insertAfter('#message').prev().remove();
+                                    $("#chat").empty().append('<div class="response">' + data.response + '</div>')
+                                    $("#chat").animate({ opacity: 0.95}, 800);
+                                    $("#message").focus();
+
+                                });
+                                $("#message").val('');
+                            });
+                        }
+                    }
+                    $('.send_btn').click(send_message());
+                    $(document).on('keypress',function(e) {
+                        if(e.which == 13) {
+                            send_message()
+                        }
+                    });
+				}();
+			});
+        </script>
+	</body>
+</html>

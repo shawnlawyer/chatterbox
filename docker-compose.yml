@@ -1,0 +1,57 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        tensorflow_installed: 1
+
+    environment:
+      - tensorflow_installed=1
+    env_file: .env
+    depends_on:
+      - mysql
+    ports:
+      - "80:80"
+    restart: always
+    volumes:
+     - .:/var/www/html:delegated
+
+  mysql:
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=data
+      - MYSQL_USER=data
+      - MYSQL_PASSWORD=data
+      - MYSQL_PORT=3306
+    image: mysql:5.7
+    command: --sql-mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY'
+    volumes:
+      - ./mysql_data:/var/lib/mysql:delegated
+    ports:
+      - "3306:3306"
+    restart: always
+
+  jupyter:
+    build:
+      context: ./jupyter
+    ports:
+      - "8888:8888"
+    links:
+      - postgres
+    volumes:
+      - "./notebooks:/notebooks"
+      - "./data:/data"
+      - "./lib:/lib"
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: data
+      POSTGRES_PASSWORD: data
+      POSTGRES_DB: data
+
+

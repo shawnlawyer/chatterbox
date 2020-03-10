@@ -1,0 +1,329 @@
+-- MySQL dump 10.13  Distrib 5.7.23, for macos10.13 (x86_64)
+--
+-- Host: 127.0.0.1    Database: data
+-- ------------------------------------------------------
+-- Server version	5.7.25
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `agents`
+--
+
+DROP TABLE IF EXISTS `agents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agents` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `agents`
+--
+
+LOCK TABLES `agents` WRITE;
+/*!40000 ALTER TABLE `agents` DISABLE KEYS */;
+INSERT INTO `agents` VALUES (1,'main');
+/*!40000 ALTER TABLE `agents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `agents_modules`
+--
+
+DROP TABLE IF EXISTS `agents_modules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agents_modules` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `agent_id` bigint(20) unsigned DEFAULT NULL,
+  `module_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `agent_id` (`agent_id`),
+  KEY `module_id` (`module_id`) USING BTREE,
+  CONSTRAINT `agents_modules_ibfk_1` FOREIGN KEY (`agent_id`) REFERENCES `agents` (`id`),
+  CONSTRAINT `agents_modules_ibfk_2` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `agents_modules`
+--
+
+LOCK TABLES `agents_modules` WRITE;
+/*!40000 ALTER TABLE `agents_modules` DISABLE KEYS */;
+INSERT INTO `agents_modules` VALUES (38,1,1),(39,1,2),(40,1,3),(41,1,4);
+/*!40000 ALTER TABLE `agents_modules` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `intent_contexts`
+--
+
+DROP TABLE IF EXISTS `intent_contexts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `intent_contexts` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `intent_id` bigint(20) unsigned DEFAULT NULL,
+  `text` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `intent_id` (`intent_id`),
+  CONSTRAINT `intent_contexts_ibfk_1` FOREIGN KEY (`intent_id`) REFERENCES `intents` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `intent_contexts`
+--
+
+LOCK TABLES `intent_contexts` WRITE;
+/*!40000 ALTER TABLE `intent_contexts` DISABLE KEYS */;
+INSERT INTO `intent_contexts` VALUES (1,20,'neural network');
+/*!40000 ALTER TABLE `intent_contexts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `intent_dialogs`
+--
+
+DROP TABLE IF EXISTS `intent_dialogs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `intent_dialogs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `intent_id` bigint(20) unsigned NOT NULL,
+  `name` char(255) NOT NULL,
+  `slot` char(255) DEFAULT NULL,
+  `input_type` char(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `intent_id` (`intent_id`),
+  CONSTRAINT `intent_dialogs_ibfk_1` FOREIGN KEY (`intent_id`) REFERENCES `intents` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `intent_dialogs`
+--
+
+LOCK TABLES `intent_dialogs` WRITE;
+/*!40000 ALTER TABLE `intent_dialogs` DISABLE KEYS */;
+INSERT INTO `intent_dialogs` VALUES (1,13,'user_name','email','email'),(2,13,'user_password','secret','password');
+/*!40000 ALTER TABLE `intent_dialogs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `intent_patterns`
+--
+
+DROP TABLE IF EXISTS `intent_patterns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `intent_patterns` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `intent_id` bigint(20) unsigned NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `intent_id` (`intent_id`),
+  CONSTRAINT `intent_patterns_ibfk_1` FOREIGN KEY (`intent_id`) REFERENCES `intents` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `intent_patterns`
+--
+
+LOCK TABLES `intent_patterns` WRITE;
+/*!40000 ALTER TABLE `intent_patterns` DISABLE KEYS */;
+INSERT INTO `intent_patterns` VALUES (1,1,'Hi'),(2,1,'Hello'),(3,1,'You there'),(4,1,'Is anyone there'),(5,1,'Hello'),(6,1,'Hey'),(7,1,'Moo'),(8,2,'How are you'),(9,2,'Whats up'),(10,3,'Bye'),(11,3,'See you later'),(12,3,'Goodbye'),(13,3,'Nice chatting to you, bye'),(14,3,'Till next time'),(15,4,'Thanks'),(16,4,'Thank you'),(17,4,'That\'s helpful'),(18,4,'Awesome, thanks'),(19,4,'Thanks for helping me'),(20,5,''),(21,6,'How you could help me?'),(22,6,'What you can do?'),(23,6,'What help you provide'),(24,6,'How you can be helpful?'),(25,6,'What support is offered'),(26,7,'What is marijuana?'),(27,7,'What is cannabis?'),(28,7,'What is weed?'),(29,7,'What is pot?'),(30,7,'describe marijuana'),(31,7,'describe weed'),(32,8,'describe  cannabis'),(33,7,'describe pot'),(34,7,'tell me about marijuana'),(35,7,'tell me about weed'),(36,7,'tell me about pot'),(37,7,'Marijuana is?'),(38,7,'weed is'),(39,7,'cannabis is'),(40,7,'pot is'),(41,7,'Marijuana is what'),(42,7,'pot is what'),(43,8,'weed is what'),(44,7,'weed is what?'),(45,7,'cannabis is what'),(46,7,'pot is what?'),(47,8,'How is marijuana used'),(48,8,'How is cannabis used?'),(49,8,'How is weed used?'),(50,8,'How is pot used?'),(51,8,'How to use marijuana?'),(52,8,'How to use cannabis used?'),(53,8,'How to use weed'),(54,8,'Can I smoke pot used?'),(55,7,'Can I smoke marijuana?'),(56,8,'Can I smoke cannabis used?'),(57,8,'Can I smoke weed used?'),(58,8,'ow to use pot used?'),(59,8,'is weed smoked'),(60,8,'is cannabis smoked'),(61,8,'is marijuana smoked'),(62,10,'What determines how marijuana effects a person?'),(63,10,'What decides how marijuana effects a person?'),(64,10,'What determines how weed effects a person?'),(65,10,'What decides how cannabis effects a person?'),(66,10,'What determines how pot effects a person?'),(67,11,'Is marijuana medicine?'),(68,11,'Is weed medicine'),(69,11,'Is cannabis medicine'),(70,11,'Is pot medicine'),(71,11,'can pot be medicine'),(72,11,'can weed be medicine'),(73,11,'Is cannabis medical'),(74,11,'Is weed medical'),(75,8,'How do you use marijuana?'),(76,8,'What is the use of marijuana?'),(77,8,'What is the use of cannabis?'),(78,13,'login'),(79,13,'authenticate'),(80,16,'log out'),(81,16,'sign out'),(82,16,'end session'),(83,16,'log me out'),(84,13,'log me in'),(85,13,'auth in'),(86,13,'sign in'),(87,13,'can i log in'),(88,16,'logout'),(89,16,'signout'),(94,18,'what are you'),(95,18,'are you a robot'),(96,18,'are you a person'),(97,18,'are you human'),(98,19,'find dispensary'),(99,19,'find weed shops'),(100,19,'search weed shops'),(101,19,'find dispensary'),(102,19,'find cannabis'),(103,20,'what is a neural network?'),(104,20,'neural network?'),(105,20,'define neural network'),(106,18,'you are a neural network'),(107,18,'are you real'),(108,22,'hey babe'),(109,22,'hi baby'),(110,22,'hey honey'),(111,22,'hey beautiful'),(112,22,'hi lovely'),(113,23,'what is love');
+/*!40000 ALTER TABLE `intent_patterns` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `intent_responses`
+--
+
+DROP TABLE IF EXISTS `intent_responses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `intent_responses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `intent_id` bigint(20) unsigned NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `intent_id` (`intent_id`),
+  CONSTRAINT `intent_responses_ibfk_1` FOREIGN KEY (`intent_id`) REFERENCES `intents` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `intent_responses`
+--
+
+LOCK TABLES `intent_responses` WRITE;
+/*!40000 ALTER TABLE `intent_responses` DISABLE KEYS */;
+INSERT INTO `intent_responses` VALUES (1,1,'Hello, what can I help with?'),(2,1,'Hi there, how can I help?'),(3,2,'I\'m well, thanks for asking!'),(4,2,'Great!'),(5,2,'All systems go!'),(12,3,'See you!'),(13,3,'Have a nice day'),(14,3,'Bye! Come back again soon.'),(15,4,'Happy to help!'),(16,4,'Any time!'),(17,4,'My pleasure'),(18,5,'Sorry, can\'t understand you'),(19,5,'Please give me more info'),(20,5,'Not sure I understand'),(21,6,'I can say, Hello and have a simple chat with you. I also have facts about things.'),(22,6,'I have facts about things, and can have a simple chats with you.'),(23,7,'Marijuana, which can also be called weed, pot, dope, or cannabis, is the dried flowers and leaves of the cannabis plant. It contains mind-altering (e.g., psychoactive) compounds like tetrahydrocannabinol, or THC, as well as other active compounds like cannabidiol, or CBD, that are not mind-altering.'),(24,8,'There are many ways of using marijuana, and each one affects users differently. Marijuana can be rolled up and smoked like a cigarette (a joint) or a cigar (a blunt). Marijuana can also be smoked in a pipe. Sometimes people mix it in food and eat it or brew it as a tea (edibles). Smoking oils, concentrates, and extracts from the marijuana plant are on the rise. People who use this practice call it “dabbing.”'),(25,10,'Like any other drug, marijuana’s effects on a person depends on a number of factors, including the person’s previous experience with the drug or other drugs, biology (e.g., genes), gender, how the drug is taken, and how strong it is.'),(26,11,'The marijuana plant has chemicals that may help symptoms for some health problems. More and more states are making it legal to use the plant as medicine for certain conditions. But there isn’t enough research to show that the whole plant works to treat or cure these conditions. Also, the U.S. Food and Drug Administration (FDA) has not recognized or approved the marijuana plant as medicine.\r\n\r\nBecause marijuana is often smoked, it can damage your lungs and cardiovascular system (e.g., heart and blood vessels). These and other damaging effects on the brain and body could make marijuana more harmful than helpful as medicine. Another problem with marijuana as a medicine is that the ingredients aren’t exactly the same from plant to plant. There’s no way to know what kind and how much of a chemical you’re getting.\r\n\r\nTwo medicines have been made as pills from a chemical that’s like THC, one of the chemicals found in the marijuana plant that makes people feel “high.” These two medicines can treat nausea if you have cancer and make you hungry if you have AIDS and don’t feel like eating. But the chemical used to make these medicines affects the brain also, so it can do things to your body other than just working as medicine.\r\n\r\nAnother marijuana chemical that scientists are studying, called cannabidiol (CBD), doesn’t make you high because it acts on different parts of the nervous system than THC Scientists think this chemical might help children who have a lot of seizures (when your body starts twitching and jerking uncontrollably) that can’t be controlled with other medicines. Some studies have started to see whether it can help.'),(27,14,'what\'s your login?'),(28,14,'okay, let\'s get your login.'),(29,15,'enter your secret.'),(30,13,'Great, Hi {email}! You\'re secret {secret} is safe!.'),(31,16,'Take Care!'),(32,16,'I have know idea who you are.'),(33,16,'Do I know you?'),(34,16,'Done!'),(36,18,'I\'m a robot, I think.'),(37,18,'I\'m a neural network.'),(38,18,'I\'m a natural language intention classifier, to be specific.'),(39,18,'I\'m a robot.'),(40,20,'A Neural Network is defined as a system capable of self organizing information. '),(41,20,'A system capable of self organizing information. '),(43,22,'hey sexy, ness!'),(44,22,'whats up, you beast?'),(45,22,'Hey love!'),(46,23,'baby don\'t hurt me '),(47,23,'There are a lot of chemicals racing around your brain and body when you\'re in love. ... Dopamine is thought to be the \"pleasure chemical,\" producing a feeling of bliss. Norepinephrine is similar to adrenaline and produces the racing heart and excitement.');
+/*!40000 ALTER TABLE `intent_responses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `intents`
+--
+
+DROP TABLE IF EXISTS `intents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `intents` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(255) NOT NULL,
+  `module_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `model_id` (`module_id`) USING BTREE,
+  CONSTRAINT `intents_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `intents`
+--
+
+LOCK TABLES `intents` WRITE;
+/*!40000 ALTER TABLE `intents` DISABLE KEYS */;
+INSERT INTO `intents` VALUES (1,'greeting',1),(2,'status',1),(3,'goodbye',1),(4,'thanks',1),(5,'noanswer',1),(6,'options',3),(7,'what_is_cannabis',4),(8,'how_is_it_used',4),(10,'determines_how_marijuana_effects',4),(11,'is_marijuana_medicine',4),(12,'cannabis_addictive',4),(13,'login',1),(14,'user_name',1),(15,'user_password',1),(16,'logout',1),(18,'what_are_you',1),(19,'find_dispensary',4),(20,' define_neural_network',1),(22,'greeting_flirt',1),(23,'love',1),(26,'what_when_why_how',2);
+/*!40000 ALTER TABLE `intents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `modules`
+--
+
+DROP TABLE IF EXISTS `modules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `modules` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `modules`
+--
+
+LOCK TABLES `modules` WRITE;
+/*!40000 ALTER TABLE `modules` DISABLE KEYS */;
+INSERT INTO `modules` VALUES (1,'base'),(2,'context'),(3,'menu'),(4,'cannabis'),(6,'teasdfasfasf'),(7,'afds');
+/*!40000 ALTER TABLE `modules` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `role_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (3,'admin','Administrator'),(4,'editor','Editor'),(5,'test','tester');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `email` char(255) NOT NULL DEFAULT '',
+  `password` char(255) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (12,'admin@email.com','$pbkdf2-sha512$25000$gbD2/n9PqVWK8d57751TKg$gCft87zUXZ9Qv.8nTXyfFc1jykIRAvsAkhvMXChEKN9zwQ2LZN8IaMqvjaqP2NCUAo3ScISjRHNtF8emnXuTcA',1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_roles`
+--
+
+DROP TABLE IF EXISTS `users_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_roles` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userroles_user_id` (`user_id`),
+  KEY `userroles_role_id` (`role_id`),
+  CONSTRAINT `users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_roles`
+--
+
+LOCK TABLES `users_roles` WRITE;
+/*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
+INSERT INTO `users_roles` VALUES (9,12,3);
+/*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-03-10 13:15:17
