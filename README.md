@@ -1,6 +1,8 @@
 # NLP Classifier with Tensorflow and Pandas on Flask and Jupyter Notebook
 
-## Build and Run the Application  
+## Build and Run the Application 
+
+- cp .env .env.example
   
 - docker-compose up -d --build  
 
